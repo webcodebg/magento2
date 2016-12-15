@@ -56,8 +56,12 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attr
                         unset($attributesData[$attributeCode]);
                         continue;
                     }
-                    $data->setData($attributeCode, $value);
-                    $attribute->getBackend()->validate($data);
+
+                    $isChanged = (bool)$this->getRequest()->getPost('toggle_' . $attributeCode);
+                    if ($isChanged) {
+                        $data->setData($attributeCode, $value);
+                        $attribute->getBackend()->validate($data);
+                    }
                 }
             }
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
